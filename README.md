@@ -8,6 +8,22 @@
 ![Supabase](https://img.shields.io/badge/Supabase-Backend-green)
 ![Solana](https://img.shields.io/badge/Solana-Web3-purple)
 
+## 🏗️ Repository Structure
+
+This repository contains:
+
+### **Main Application**
+Complete AI-powered prediction market advisor platform with:
+- Kalshorb AI Chat integration
+- Portfolio management
+- Market analytics
+- Wallet authentication (Phantom)
+- Real-time trading insights
+
+### **Standalone Components**
+- **`components/kalshorb-standalone/`** - Independent Kalshorb AI chat component
+- **`supabase/functions/kalshorb/`** - Backend edge function for AI responses
+
 ## ✨ Features
 
 ### 🤖 **Kalshorb AI Chat Assistant**
@@ -181,6 +197,32 @@ pnpm build
 - **Vercel** (recommended): `pnpm deploy:vercel`
 - **Netlify**: Deploy `dist/` folder
 - **Custom**: Serve `dist/` with any static host
+
+## 🔧 Standalone Component Usage
+
+This repository includes a standalone Kalshorb AI chat component that can be used independently:
+
+### **Using the Standalone Component**
+```bash
+cd components/kalshorb-standalone
+
+# Install dependencies
+npm install
+
+# Configure environment
+cp .env.example .env
+# Add your OpenRouter API key and Supabase credentials
+
+# Run standalone component
+npm run dev
+```
+
+### **Integration into Other Projects**
+The standalone component in `components/kalshorb-standalone/` can be:
+- Used as a reference implementation
+- Modified for custom AI chat interfaces  
+- Integrated into existing React applications
+- Deployed independently with its own Supabase backend
 
 ## 📊 Performance
 
