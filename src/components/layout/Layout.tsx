@@ -20,11 +20,11 @@ export function Layout() {
   }
 
   if (!user) {
-    return <Navigate to="/connect" replace />;
+    return <Navigate to="/" replace />;
   }
 
   return (
-    <div className="min-h-screen bg-bg-primary">
+    <div className="min-h-screen">
       <Sidebar
         collapsed={sidebarCollapsed}
         onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
