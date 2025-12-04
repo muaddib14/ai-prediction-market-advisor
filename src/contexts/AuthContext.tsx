@@ -59,7 +59,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
           if (fetchError && fetchError.code !== 'PGRST116') {
             console.error('[AuthContext] Error fetching profile:', fetchError);
-            setError('Failed to fetch profile. Please try again.');
+            setError(`Failed to fetch profile: ${fetchError.message}`);
             setConnecting(false);
             setLoading(false);
             return;
@@ -83,10 +83,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
               risk_tolerance: 'moderate',
               kelly_fraction: 0.5,
               max_drawdown_pct: 10.0,
-              max_position_size: 0.1,
-              api_key_connected: false,
-              notifications_enabled: true,
-              dark_mode: true,
             };
 
             const { data: newProfile, error: insertError } = await supabase
@@ -99,7 +95,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
             if (insertError) {
               console.error('[AuthContext] Error creating profile:', insertError);
-              setError('Failed to create profile. Please try again.');
+              setError(`Failed to create profile: ${insertError.message}`);
               setConnecting(false);
               setLoading(false);
               return;
@@ -114,7 +110,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                   total_value: 0,
                   cash_balance: 1000, // Starting demo balance
                   pnl_total: 0,
-                  pnl_percent: 0,
                 });
               } catch (portfolioError) {
                 console.error('[AuthContext] Error creating portfolio:', portfolioError);

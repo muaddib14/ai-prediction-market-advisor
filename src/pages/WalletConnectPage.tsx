@@ -29,8 +29,25 @@ export function WalletConnectPage() {
   }, [walletConnecting, clearError]);
 
   // Check if Phantom is installed
-  const isPhantomInstalled = typeof window !== 'undefined' && 
-    (window as any).phantom?.solana?.isPhantom;
+  const [phantomDetected, setPhantomDetected] = useState(false);
+  
+  useEffect(() => {
+    const checkPhantom = () => {
+      const isPhantom = (window as any).phantom?.solana?.isPhantom;
+      setPhantomDetected(!!isPhantom);
+    };
+
+    // Check immediately
+    checkPhantom();
+
+    // Also check when window loads (in case extension loads after component)
+    if (document.readyState === 'loading') {
+      window.addEventListener('load', checkPhantom);
+      return () => window.removeEventListener('load', checkPhantom);
+    }
+  }, []);
+
+  const isPhantomInstalled = phantomDetected;
 
   const displayError = error || localError;
   const isConnecting = connecting || walletConnecting;

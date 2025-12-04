@@ -13,8 +13,10 @@ interface WalletProviderProps {
 }
 
 export const WalletProvider: FC<WalletProviderProps> = ({ children }) => {
-  // Use mainnet for production
-  const network = WalletAdapterNetwork.Mainnet;
+  // Use devnet for development, mainnet for production
+  const network = process.env.NODE_ENV === 'production' 
+    ? WalletAdapterNetwork.Mainnet 
+    : WalletAdapterNetwork.Devnet;
 
   // RPC endpoint
   const endpoint = useMemo(() => clusterApiUrl(network), [network]);
@@ -33,15 +35,15 @@ export const WalletProvider: FC<WalletProviderProps> = ({ children }) => {
     
     // Handle specific error types
     if (error.name === 'WalletNotReadyError') {
-      console.log('Phantom wallet not installed or not ready');
+      console.log('[WalletProvider] Phantom wallet not installed or not ready');
     } else if (error.name === 'WalletConnectionError') {
-      console.log('Failed to connect to wallet');
+      console.log('[WalletProvider] Failed to connect to wallet');
     } else if (error.name === 'WalletDisconnectedError') {
-      console.log('Wallet disconnected');
+      console.log('[WalletProvider] Wallet disconnected');
     } else if (error.name === 'WalletAccountError') {
-      console.log('Error with wallet account');
+      console.log('[WalletProvider] Error with wallet account');
     } else if (error.name === 'WalletPublicKeyError') {
-      console.log('Error getting public key from wallet');
+      console.log('[WalletProvider] Error getting public key from wallet');
     }
   }, []);
 
