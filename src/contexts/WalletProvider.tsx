@@ -32,26 +32,17 @@ export const WalletProvider: FC<WalletProviderProps> = ({ children }) => {
   // Error handler for wallet errors
   const onError = useCallback((error: WalletError) => {
     console.error('[WalletProvider] Wallet error:', error.name, error.message);
-    
-    // Handle specific error types
-    if (error.name === 'WalletNotReadyError') {
-      console.log('[WalletProvider] Phantom wallet not installed or not ready');
-    } else if (error.name === 'WalletConnectionError') {
-      console.log('[WalletProvider] Failed to connect to wallet');
-    } else if (error.name === 'WalletDisconnectedError') {
-      console.log('[WalletProvider] Wallet disconnected');
-    } else if (error.name === 'WalletAccountError') {
-      console.log('[WalletProvider] Error with wallet account');
-    } else if (error.name === 'WalletPublicKeyError') {
-      console.log('[WalletProvider] Error getting public key from wallet');
-    }
   }, []);
 
   return (
     <ConnectionProvider endpoint={endpoint}>
+      {/* FIX APPLIED: autoConnect={true} 
+        This ensures that selecting a wallet in the modal immediately 
+        prompts the user to connect, removing the need for a second click.
+      */}
       <SolanaWalletProvider 
         wallets={wallets} 
-        autoConnect={false}
+        autoConnect={true}
         onError={onError}
       >
         <WalletModalProvider>

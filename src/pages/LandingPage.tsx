@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { useWalletModal } from '@solana/wallet-adapter-react-ui';
@@ -11,8 +11,6 @@ import {
   LayoutDashboard, 
   Wallet, 
   BarChart3, 
-  Lock, 
-  ArrowRight,
   CheckCircle2
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
@@ -20,18 +18,26 @@ import { Card } from '@/components/ui/Card';
 
 export function LandingPage() {
   const navigate = useNavigate();
-  const { connected } = useWallet();
+  const { connected, connect, wallet, connecting } = useWallet();
   const { setVisible } = useWalletModal();
-  const { user, loading } = useAuth();
+  const { user } = useAuth();
 
-  // Helper to determine the main action
-  const handleMainAction = () => {
+  // Smart Handler: Handles all connection states
+  const handleMainAction = useCallback(async () => {
     if (connected) {
       navigate('/dashboard');
+    } else if (wallet && !connected) {
+      // FIX: If wallet is selected but not connected, force connection
+      try {
+        await connect();
+      } catch (error) {
+        console.error("Connection failed:", error);
+      }
     } else {
-      setVisible(true); // Opens the wallet selection modal directly
+      // Otherwise open the modal to select a wallet
+      setVisible(true); 
     }
-  };
+  }, [connected, wallet, navigate, setVisible, connect]);
 
   const features = [
     {
@@ -95,7 +101,6 @@ export function LandingPage() {
               <a href="#features" className="hover:text-text-primary transition-colors">Features</a>
               <a href="#how-it-works" className="hover:text-text-primary transition-colors">How it Works</a>
             </div>
-            {/* The Wallet Button - Styled via global CSS */}
             <WalletMultiButton />
           </div>
         </div>
@@ -103,7 +108,6 @@ export function LandingPage() {
 
       {/* Hero Section */}
       <section className="relative overflow-hidden pt-20 pb-32">
-        {/* Decorative Gradients */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-accent-primary/5 rounded-full blur-[120px] pointer-events-none" />
         
         <div className="max-w-5xl mx-auto px-6 text-center relative z-10">
@@ -125,25 +129,30 @@ export function LandingPage() {
           </p>
 
           <div className="flex flex-col items-center gap-6">
+            {/* FIX APPLIED:
+              1. Uses 'icon' prop so text and icon stay on the same line.
+              2. Logic handles 'Selected but not Connected' state.
+              3. Shows 'loading' state while connecting.
+            */}
             <Button 
               size="lg" 
-              className="h-14 px-8 text-lg gap-3 shadow-lg shadow-accent-primary/20 hover:shadow-accent-primary/40 transition-all whitespace-nowrap"
+              className="h-14 px-8 text-lg gap-3 shadow-lg shadow-accent-primary/20 hover:shadow-accent-primary/40 transition-all whitespace-nowrap z-20"
               onClick={handleMainAction}
-            >
-              {connected ? (
-                <>
+              loading={connecting}
+              icon={
+                connected ? (
                   <LayoutDashboard className="w-5 h-5" />
-                  Enter Dashboard
-                </>
-              ) : (
-                <>
+                ) : (
                   <Wallet className="w-5 h-5" />
-                  Connect Wallet to Start
-                </>
-              )}
+                )
+              }
+            >
+              {connected 
+                ? "Enter Dashboard" 
+                : (wallet && !connected ? "Connect Wallet" : "Connect Wallet to Start")
+              }
             </Button>
 
-            {/* Conditional Copywriting */}
             {connected ? (
               <p className="text-sm text-green-400 flex items-center gap-2 animate-in fade-in slide-in-from-bottom-2">
                 <CheckCircle2 className="w-4 h-4" />
@@ -208,7 +217,6 @@ export function LandingPage() {
           </div>
 
           <div className="relative">
-            {/* Connecting Line */}
             <div className="absolute left-[27px] top-8 bottom-8 w-0.5 bg-border-subtle md:hidden" />
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
