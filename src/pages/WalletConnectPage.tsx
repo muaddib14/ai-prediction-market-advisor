@@ -4,7 +4,7 @@ import { useWallet } from '@solana/wallet-adapter-react';
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { useAuth } from '@/contexts/AuthContext';
 import { Card } from '@/components/ui/Card';
-import { Wallet, TrendingUp, Shield, Zap, Brain, AlertCircle, RefreshCw } from 'lucide-react';
+import { Wallet, TrendingUp, Shield, Zap, AlertCircle, RefreshCw } from 'lucide-react';
 
 export function WalletConnectPage() {
   const navigate = useNavigate();
@@ -60,7 +60,7 @@ export function WalletConnectPage() {
           <div className="text-center lg:text-left">
             <div className="inline-flex items-center gap-3 mb-6">
               <div className="p-3 bg-accent-primary/10 rounded-2xl">
-                <Brain className="w-10 h-10 text-accent-primary" />
+                <img src="/logo.jpeg" alt="AI Prediction Market Advisor Logo" className="w-10 h-10 rounded-lg object-cover" />
               </div>
               <div>
                 <h1 className="text-4xl font-bold text-text-primary">

@@ -58,9 +58,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
       <div className="h-16 flex items-center justify-between px-5 border-b border-border-subtle">
         {!collapsed && (
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-accent-primary flex items-center justify-center">
-              <TrendingUp className="w-5 h-5 text-black" />
-            </div>
+            <img src="/logo.jpeg" alt="AI Prediction Market Advisor Logo" className="w-8 h-8 rounded-lg object-cover" />
             <span className="font-semibold text-text-primary">Prediction AI</span>
           </div>
         )}
